@@ -63,12 +63,20 @@ module RubyBox
       http.ssl_version = :SSLv3
       #http.set_debug_output($stdout)
 
+      ##Clear the existing request fields to avoid duplicates
+      if request.key?('Authorization')
+         request.delete('Authorization')
+      end
+
       if @access_token
         request.add_field('Authorization', "Bearer #{@access_token.token}")
       else
         request.add_field('Authorization', build_auth_header)
       end
 
+      if request.key?('As-User')
+         request.delete('As-User')
+      end
 
       request.add_field('As-User', "#{@as_user}") if @as_user
 
