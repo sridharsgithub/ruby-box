@@ -17,22 +17,24 @@ module RubyBox
       if opts[:client_id]
         @oauth2_client = OAuth2::Client.new(opts[:client_id], opts[:client_secret], OAUTH2_URLS.dup)
 
-	Launchy.open("https://app.box.com/api/oauth2/authorize?response_type=code&client_id=#{opts[:client_id]}&redirect_uri=http://localhost:4567")
-
-	authTokenCodeOutput = `ruby #{::File.dirname(__FILE__)}/box_authenticator.rb 2> /dev/null`
-	if authTokenCodeOutput =~ /code=(\w+)/
-		authTokenCode = $1
-		#puts "Got Auth Code #{authTokenCode}"
+        ##Redirect to box to generate access key and refresh token only on UNIX based OS
+	if ::File.exist?('/bin/uname') || ::File.exist?('/usr/bin/uname')
+	  Launchy.open("https://app.box.com/api/oauth2/authorize?response_type=code&client_id=#{opts[:client_id]}&redirect_uri=http://localhost:4567")
+	  authTokenCodeOutput = `ruby #{::File.dirname(__FILE__)}/box_authenticator.rb 2> /dev/null`
+	  if authTokenCodeOutput =~ /code=(\w+)/
+	    authTokenCode = $1
+	    #puts "Got Auth Code #{authTokenCode}"
+	  else
+	    puts "**ERROR** : Authorization Token Code is not available."
+	    exit
+	  end
+	  @token = get_access_token(authTokenCode)
+	  @access_token = @token
+	  @refresh_token =  @token.refresh_token
 	else
-		puts "**ERROR** : Authorization Token Code is not available."
-		exit
-	end
-	@token = get_access_token(authTokenCode)
-	@access_token = @token
-	@refresh_token =  @token.refresh_token
-	
-        #@access_token = OAuth2::AccessToken.new(@oauth2_client, opts[:access_token]) if opts[:access_token]
-        #@refresh_token = opts[:refresh_token]
+          @access_token = OAuth2::AccessToken.new(@oauth2_client, opts[:access_token]) if opts[:access_token]
+          @refresh_token = opts[:refresh_token]
+        end
         @as_user = opts[:as_user]
       else # Support legacy API for historical reasons.
         @api_key = opts[:api_key]
