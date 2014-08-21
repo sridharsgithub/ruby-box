@@ -28,7 +28,7 @@ module RubyBox
 		exit
 	end
 	@token = get_access_token(authTokenCode)
-	@access_token = @token.token
+	@access_token = @token
 	@refresh_token =  @token.refresh_token
 	
         #@access_token = OAuth2::AccessToken.new(@oauth2_client, opts[:access_token]) if opts[:access_token]
@@ -54,6 +54,7 @@ module RubyBox
     def refresh_token(refresh_token)
       refresh_access_token_obj = OAuth2::AccessToken.new(@oauth2_client, @access_token.token, {'refresh_token' => refresh_token})
       @access_token = refresh_access_token_obj.refresh!
+      @refresh_token = @access_token.refresh_token
     end
 
     def build_auth_header
