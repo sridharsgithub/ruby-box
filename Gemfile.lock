@@ -15,6 +15,8 @@ GEM
     json (1.7.7)
     jwt (0.1.5)
       multi_json (>= 1.0)
+    launchy (2.1.0)
+      addressable (~> 2.2.6)
     multi_json (1.6.0)
     multipart-post (1.1.5)
     oauth2 (0.8.0)
@@ -52,6 +54,7 @@ DEPENDENCIES
   bundler
   jeweler (~> 1.6.4)
   json
+  launchy
   multipart-post
   oauth2
   rspec

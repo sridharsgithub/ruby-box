@@ -5,6 +5,7 @@ gem "oauth2"
 gem "json"
 gem "addressable"
 gem "sinatra"
+gem "launchy"
 
 group :development do
   gem "rspec"
