@@ -4,6 +4,7 @@ gem "multipart-post"
 gem "oauth2"
 gem "json"
 gem "addressable"
+gem "sinatra"
 
 group :development do
   gem "rspec"

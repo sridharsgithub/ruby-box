@@ -10,7 +10,23 @@ RubyBox provides a simple, chainable, feature-rich client for [Box's 2.0 API](ht
 Authorization
 -------------
 
-RubyBox uses Box's OAuth2 Implementaton, Here are the steps involved in authorizing a client:
+RubyBox uses Box's OAuth2 Implementaton. For any UNIX based operating systems (including Linux, MacOS) you can authorize the application through Box's UI and generate the access code and refresh code automatically based on your client ID and client secret. For non UNIX based operating systems, you will have to manually generate the access token and refresh token and find a way to store the refresh token.
+
+For UNIX based operating systems, here are the steps involved in authorizing a client:
+
+```ruby
+require 'ruby-box'
+
+session = RubyBox::Session.new({
+  client_id: 'your-client-id',
+  client_secret: 'your-client-secret'
+})
+client = RubyBox::Client.new(session)
+```
+This should automatically generate the required access token and refresh token for the client to work. You will be required to grant access to the application through Box's UI, every time you run you invoke ruby-box. The access token will be automatically refreshed and there is no need to write any extra lines of code to store the refresh token.
+
+
+For Non-UNIX based operating systems, here are the steps involved in authorizing a client:
 
 __1)__ Get the authorization url.
 
