@@ -79,7 +79,8 @@ module RubyBox
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
-      http.ssl_version = :SSLv3
+      http.ssl_version = :TLSv1_2
+      #http.ssl_version = :SSLv3
       #http.set_debug_output($stdout)
 
       ##Clear the existing request fields to avoid duplicates
